@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
@@ -11,7 +12,8 @@ class CalculatorPage extends StatefulWidget {
 }
 
 class _CalculatorPageState extends State<CalculatorPage> {
-  double _result = 0;
+  dynamic _result = 0;
+
 
 
   final TextEditingController _controller = TextEditingController();
@@ -22,34 +24,67 @@ class _CalculatorPageState extends State<CalculatorPage> {
     });
   }
 
-
+  String numero = "";
+  String resultado = "";
   void _calcular() {
-    List<String> partes = _controller.text.split('');
+    try {
+      String conta = _controller.text;
 
-    double numero1 = double.parse(partes[0]);
-    String operador = partes[1];
-    double numero2 = double.parse(partes[2]);
+      if (conta.contains("+")) {
+        var partes = conta.split("+");
 
-    double resultado;
-    switch (operador) {
-      case '+':
-        resultado = numero1 + numero2;
-        break;
-      case '-':
-        resultado = numero1 - numero2;
-        break;
-      case 'x':
-        resultado = numero1 * numero2;
-        break;
-      case '÷':
-        resultado = numero1 / numero2;
-        break;
-      default:
-        throw Exception('Operador inválido');
+        double n1 = double.parse(partes[0]);
+        double n2 = double.parse(partes[1]);
+
+        setState(() {
+          _result = n1 + n2;
+        });
+      }
+
+      if (conta.contains("-")) {
+        var partes = conta.split("-");
+
+        double n1 = double.parse(partes[0]);
+        double n2 = double.parse(partes[1]);
+
+        setState(() {
+          _result = n1 - n2;
+        });
+      }
+
+      if (conta.contains("x")) {
+        var partes = conta.split("x");
+
+        double n1 = double.parse(partes[0]);
+        double n2 = double.parse(partes[1]);
+
+        setState(() {
+          _result = n1 * n2;
+        });
+      }
+
+      if (conta.contains("÷")) {
+        var partes = conta.split("÷");
+
+        double n1 = double.parse(partes[0]);
+        double n2 = double.parse(partes[1]);
+
+        if(n2 == 0)
+        {
+            _result ='Não existe divisão por zero';
+            return;
+        }
+
+        setState(() {
+          _result = n1 / n2;
+        });
+      }
+
+    } catch (e) {
+      setState(() {
+        _result = 0;
+      });
     }
-    setState(() {
-      _result = resultado;
-    });
   }
 
 
@@ -206,6 +241,22 @@ class _CalculatorPageState extends State<CalculatorPage> {
                 ),
               ],
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        textStyle: TextStyle(
+                            fontSize: 20
+                        ),
+                        backgroundColor: Colors.blue
+                    ),
+                    onPressed: () => _adicionarValor('0'),
+                    child: Text('0')
+                ),
+
+              ],
+            ),
 
 
 
@@ -266,7 +317,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
                         backgroundColor: Colors.blue
                     ),
                     onPressed: () => _adicionarValor('x'),
-                    child: Text('*')
+                    child: Text('x')
                 ),
                 ElevatedButton(
                     style: ElevatedButton.styleFrom(

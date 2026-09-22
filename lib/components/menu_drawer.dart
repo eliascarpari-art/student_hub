@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:student_hub/screens/calculator_page.dart';
 import 'package:student_hub/screens/home_page.dart';
 import '../screens/courses_page.dart';
+import '../screens/login_page.dart';
 import '../screens/register_page.dart';
 
 
@@ -37,6 +38,12 @@ class MenuDrawer extends StatelessWidget{
             title: Text("Tela de Cursos"),
             onTap: (){
               Navigator.push(context,MaterialPageRoute(builder: (context) => CoursesPage()));
+            },
+          ),
+          ListTile(
+            title: Text("Sair"),
+            onTap: (){
+              Navigator.push(context,MaterialPageRoute(builder: (context) => LoginPage()));
             },
           ),
 
